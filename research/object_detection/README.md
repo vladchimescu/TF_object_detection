@@ -67,7 +67,10 @@ cp faster_rcnn_inception_v2_coco_2018_01_28/pipeline.config trainmodel
 ```
 
 ### 3. **IMPORTANT**: Modify the configuration file (`trainmodel/pipeline.config`)
-Within this file change only:
+Having copied the configuration file from the pre-trained model, we set some important model parameters (learning rate, optimization algorithm, etc). However, the object detection API still needs to know where the train / test data is located as well as if we want to use a pre-trained model a starting point for training the model on our custom data.
+
+
+In order to do this, you need to change `trainmodel/pipeline.cofnig`. Within the file change only the following lines (note that `ABSOLUTE_PATH` and `PATH_TO_DATA` are placeholders and you need to replace these with absolute paths):
 + Specify the absolute path to the checkpoint of the pre-trained model:
 ```
 fine_tune_checkpoint: "$ABSOLUTE_PATH/faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt"
