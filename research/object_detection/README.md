@@ -11,6 +11,16 @@ Huang J, Rathod V, Sun C, Zhu M, Korattikara A, Fathi A, Fischer I, Wojna Z,
 Song Y, Guadarrama S, Murphy K, CVPR 2017
 ```
 
+## Introduction
+Until recently object detection has been rarely used for large-scale biological data as the computational models used for object detection are relatively complex (Faster R-CNN, YOLO, etc) and often require GPU computing for efficient training. However, in images with complex backgrounds object detection can be very handy, as the task of locating only objects of interest is quite common in biology / medicine.
+
+Another (perceived) limitation of object detection models is that while there are many models pre-trained on very large image sets with natural images (animals, landscapes, etc) it is not immediately clear whether one can use transfer learning to deploy these models on biological data. Some of the examples of using object detection in biology are:
+
++ Kassis, T., Hernandez-Gordillo, V. et al (2019). OrgaQuant: Human Intestinal Organoid Localization and Quantification Using Deep Convolutional Neural Networks. *NatureScientific Reports*
+
++ Herbst, S., Kim, V. et al (2021). Systematic comparison of mono- and coculture screening in leukemia samples. *Manuscript in preparation*
+
+
 ## Instructions
 
 ### 1. Prepare your data:
