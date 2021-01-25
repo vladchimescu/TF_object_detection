@@ -104,4 +104,9 @@ python legacy/train.py --logtostderr --train_dir=trainmodel --pipeline_config_pa
 If training is interrupted, you can re-start training by running the same command. Model training will resume from the last saved checkpoint.
 
 
-
+## 5. Export the graph
+After training for thousands of epochs and checking that the loss is decreasing, you might want to stop training the model. In order to use the trained model, you need to export the last model checkpoint as a computational graph:
+```
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path trainmodel/pipeline.config --trained_checkpoint_prefix trainmodel/model.ckpt-XYZ --output_directory MODELOUT
+```
+Note that `XYZ` is the placeholder for the last model checkpoint index (i.e. last training epoch) and `MODELOUT` is the location where you want to save the exported graph.
