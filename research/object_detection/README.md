@@ -1,5 +1,5 @@
 # TensorFlow object detection API for microscopy images
-In this repository the object detection API (`tensorflow/models/research/object_detection`) is adapted for using on biological data (e.g. microscopy images).
+In this repository the object detection API (`tensorflow/models/research/object_detection`) is adapted for use with biological image data (e.g. microscopy images).
 
 
 If you use the TensorFlow Object
@@ -13,7 +13,9 @@ Song Y, Guadarrama S, Murphy K, CVPR 2017
 
 ## Instructions
 
-1. Prepare your data:
+### 1. Prepare your data:
+The goal of data preparation is to label your data ("ground truth") and generate [TensorFlow record](https://www.tensorflow.org/tutorials/load_data/tfrecord) files for the train and test sets.
+
 + Label your images in `input_images` using [tzutalin/labelimg](https://github.com/tzutalin/labelImg)
 + Split the labelled data in `input_images` into train / test folds so that you have
 ```
@@ -32,7 +34,8 @@ python generate_tfrecord.py --csv_input=$dir/train_labels.csv --image_dir=$dir/t
 python generate_tfrecord.py --csv_input=$dir/test_labels.csv  --image_dir=$dir/test --output_path=$dir/test.record
 ```
 
-2. Set up the object detection API for training:
+### 2. Set up the object detection API for training:
+In this step we'll set up the directory `trainmodel` which will contain the [model checkpoint](https://www.tensorflow.org/tutorials/keras/save_and_load) that keeps track of training. The final checkpoint (after a couple thousand training epochs) will be also in `trainmodel` directory.
 + Create a directory `trainmodel`
 ```
 mkdir trainmodel
@@ -63,7 +66,8 @@ tar -xvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 cp faster_rcnn_inception_v2_coco_2018_01_28/pipeline.config trainmodel
 ```
 
-3. *IMPORTANT*: Modify the configuration file (`trainmodel/pipeline.config`
+### 3. **IMPORTANT**: Modify the configuration file (`trainmodel/pipeline.config`)
+Within this file change only:
 + Specify the absolute path to the checkpoint of the pre-trained model:
 ```
 fine_tune_checkpoint: "$ABSOLUTE_PATH/faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt"
@@ -89,10 +93,12 @@ eval_input_reader {
   }
 ```
 
-4. Train the model:
+## 4. Train the model
+To run training on your data run:
 ```
 python legacy/train.py --logtostderr --train_dir=trainmodel --pipeline_config_path=trainmodel/pipeline.config 
 ```
+If training is interrupted, you can re-start training by running the same command. Model training will resume from the last saved checkpoint.
 
 
 
