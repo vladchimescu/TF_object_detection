@@ -14,7 +14,7 @@ Song Y, Guadarrama S, Murphy K, CVPR 2017
 ## Instructions
 
 ### 1. Prepare your data:
-The goal of data preparation is to label your data ("ground truth") and generate [TensorFlow record](https://www.tensorflow.org/tutorials/load_data/tfrecord) files for the train and test sets.
+The goal of data preparation is to label your data ("ground truth") and generate [TensorFlow record](https://www.tensorflow.org/tutorials/load_data/tfrecord) files that will be used as train and test sets.
 
 + Label your images in `input_images` using [tzutalin/labelimg](https://github.com/tzutalin/labelImg)
 + Split the labelled data in `input_images` into train / test folds so that you have
@@ -22,11 +22,11 @@ The goal of data preparation is to label your data ("ground truth") and generate
 input_images/train
 input_images/test
 ```
-+ Run `xml_to_csv.py` script: 
++ Note that the labelling tool outputs XML files for each image. First, run `xml_to_csv.py` script: 
 ```
 python xml_to_csv.py input_images
 ```
-+ Generate TensorFlow record files:
++ Finally, generate TensorFlow record files:
 ```
 dir=input_images
 python generate_tfrecord.py --csv_input=$dir/train_labels.csv --image_dir=$dir/train --output_path=$dir/train.record
@@ -35,8 +35,8 @@ python generate_tfrecord.py --csv_input=$dir/test_labels.csv  --image_dir=$dir/t
 ```
 
 ### 2. Set up the object detection API for training:
-In this step we'll set up the directory `trainmodel` which will contain the [model checkpoint](https://www.tensorflow.org/tutorials/keras/save_and_load) that keeps track of training. The final checkpoint (after a couple thousand training epochs) will be also in `trainmodel` directory.
-+ Create a directory `trainmodel`
+In this step we'll set up a directory `trainmodel` which will contain the [model checkpoint](https://www.tensorflow.org/tutorials/keras/save_and_load) that keeps track of training. The final checkpoint, after you stop training, will be saved in `trainmodel` directory. Another important step is downloading a pre-trained model (which was trained on COCO image set) and using its weights for hyperparameter initialization ("transfer learning").
++ Create a directory `trainmodel`:
 ```
 mkdir trainmodel
 ```
@@ -67,10 +67,10 @@ cp faster_rcnn_inception_v2_coco_2018_01_28/pipeline.config trainmodel
 ```
 
 ### 3. **IMPORTANT**: Modify the configuration file (`trainmodel/pipeline.config`)
-Having copied the configuration file from the pre-trained model, we set some important model parameters (learning rate, optimization algorithm, etc). However, the object detection API still needs to know where the train / test data is located as well as if we want to use a pre-trained model a starting point for training the model on our custom data.
+Having copied the configuration file from the pre-trained model, we set some important model parameters (learning rate, optimization algorithm, etc). However, the object detection API still needs to know where the train / test data is located as well as if we want to use a pre-trained model as a starting point for training the model on our custom data.
 
 
-In order to do this, you need to change `trainmodel/pipeline.cofnig`. Within the file change only the following lines (note that `ABSOLUTE_PATH` and `PATH_TO_DATA` are placeholders and you need to replace these with absolute paths):
+In order to do this, you need to change `trainmodel/pipeline.cofnig`. Within this file change only the following lines (note that `ABSOLUTE_PATH` and `PATH_TO_DATA` are placeholders and you need to replace these with absolute paths).
 + Specify the absolute path to the checkpoint of the pre-trained model:
 ```
 fine_tune_checkpoint: "$ABSOLUTE_PATH/faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt"
